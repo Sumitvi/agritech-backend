@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/v1/farmers")
 public class LandController {
@@ -30,4 +31,26 @@ public class LandController {
         List<Land> lands = landService.getLandsByFarmer(farmerId);
         return ResponseEntity.ok(lands);
     }
+
+    @PutMapping("/{farmerId}/lands/{landId}")
+    public ResponseEntity<Land> updateLand(
+            @PathVariable Long farmerId,
+            @PathVariable Long landId,
+            @RequestBody Land landRequest) {
+
+        Land updated = landService.updateLand(farmerId, landId, landRequest);
+        return ResponseEntity.ok(updated);
+    }
+
+
+
+    @DeleteMapping("/{farmerId}/lands/{landId}")
+    public ResponseEntity<String> deleteLand(
+            @PathVariable Long farmerId,
+            @PathVariable Long landId) {
+
+        landService.deleteLand(farmerId, landId);
+        return ResponseEntity.ok("Land deleted successfully");
+    }
+
 }

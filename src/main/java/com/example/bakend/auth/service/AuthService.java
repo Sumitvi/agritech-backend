@@ -50,7 +50,11 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getMobile(), user.getRole().name());
+        String token = jwtUtil.generateToken(
+                user.getMobile(),
+                user.getRole().name(),
+                user.getId()
+        );
 
         return new JwtResponse(token, user.getRole(), user.getId());
     }

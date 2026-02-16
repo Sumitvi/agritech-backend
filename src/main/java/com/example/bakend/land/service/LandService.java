@@ -31,4 +31,43 @@ public class LandService {
     public List<Land> getLandsByFarmer(Long farmerId) {
         return landRepository.findByFarmerId(farmerId);
     }
+
+
+    // Update land
+    public Land updateLand(Long farmerId, Long landId, Land updatedLand) {
+
+        Land existingLand = landRepository.findById(landId)
+                .orElseThrow(() -> new RuntimeException("Land not found"));
+
+        // 🔒 Ensure land belongs to farmer
+        if (!existingLand.getFarmer().getId().equals(farmerId)) {
+            throw new RuntimeException("Unauthorized access to this land");
+        }
+
+        existingLand.setAreaInAcre(updatedLand.getAreaInAcre());
+        existingLand.setSoilType(updatedLand.getSoilType());
+        existingLand.setIrrigationType(updatedLand.getIrrigationType());
+        existingLand.setVillage(updatedLand.getVillage());
+        existingLand.setDistrict(updatedLand.getDistrict());
+        existingLand.setState(updatedLand.getState());
+
+        return landRepository.save(existingLand);
+    }
+
+
+    // Delete land
+    public void deleteLand(Long farmerId, Long landId) {
+
+        Land land = landRepository.findById(landId)
+                .orElseThrow(() -> new RuntimeException("Land not found"));
+
+        // 🔒 Ownership validation
+        if (!land.getFarmer().getId().equals(farmerId)) {
+            throw new RuntimeException("Unauthorized delete attempt");
+        }
+
+        landRepository.delete(land);
+    }
+
+
 }
