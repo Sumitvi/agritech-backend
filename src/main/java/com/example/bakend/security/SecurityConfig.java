@@ -48,13 +48,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/orders/my").hasAuthority("ROLE_FARMER")
 
                         .requestMatchers("/api/v1/crops/**").hasAuthority("ROLE_FARMER")
-                        .requestMatchers("/api/v1/market/**").hasAuthority("ROLE_FARMER")
-
+                        .requestMatchers("/api/v1/market/**")
+                        .hasAnyAuthority("ROLE_FARMER", "ROLE_TRADER")
+                        .requestMatchers("/api/v1/msp/**")
+                        .hasAnyAuthority("ROLE_FARMER", "ROLE_TRADER")
 
                         // Trader APIs
                         .requestMatchers("/api/v1/trades/buy").hasAuthority("ROLE_TRADER")
                         .requestMatchers("/api/v1/trades/trader/**").hasAuthority("ROLE_TRADER")
-
+                        .requestMatchers("/api/v1/trades/listed")
+                        .hasAuthority("ROLE_TRADER")
                         // Store Owner APIs
                         .requestMatchers("/api/v1/store/product/**").hasAuthority("ROLE_STORE_OWNER")
                         .requestMatchers("/api/v1/orders/*/ship")

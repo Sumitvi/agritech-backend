@@ -62,4 +62,11 @@ public class TradeController {
         List<Trade> trades = tradeService.getTradesByTrader(traderId);
         return ResponseEntity.ok(trades);
     }
+
+    @GetMapping("/listed")
+    public ResponseEntity<List<Trade>> getAllListedTrades() {
+
+        List<Trade> trades = tradeService.getAllListedTrades();
+        return ResponseEntity.ok(trades);
+    }
 }

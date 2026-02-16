@@ -66,6 +66,10 @@ public class TradeService {
         return tradeRepository.findByFarmerId(farmerId);
     }
 
+    public List<Trade> getAllListedTrades() {
+        return tradeRepository.findByStatus(TradeStatus.LISTED);
+
+    }
     // Get all trades of a trader
     public List<Trade> getTradesByTrader(Long traderId) {
         return tradeRepository.findByTraderId(traderId);
