@@ -48,10 +48,41 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/orders/my").hasAuthority("ROLE_FARMER")
 
                         .requestMatchers("/api/v1/crops/**").hasAuthority("ROLE_FARMER")
-                        .requestMatchers("/api/v1/market/**")
+                        .requestMatchers("/api/v1/market/mandi")
                         .hasAnyAuthority("ROLE_FARMER", "ROLE_TRADER")
-                        .requestMatchers("/api/v1/msp/**")
+
+                        .requestMatchers("/api/v1/market/mandi/add")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+                        .requestMatchers("/api/v1/market/mandi/all")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+                        .requestMatchers("/api/v1/market/mandi/update/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+                        .requestMatchers("/api/v1/market/mandi/delete/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+                        .requestMatchers("/api/v1/contractors/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+
+
+                        // MSP APIs
+                        .requestMatchers("/api/v1/msp/get")
                         .hasAnyAuthority("ROLE_FARMER", "ROLE_TRADER")
+
+                        .requestMatchers("/api/v1/msp/add")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+                        .requestMatchers("/api/v1/msp/all")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+                        .requestMatchers("/api/v1/msp/update/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+                        .requestMatchers("/api/v1/msp/delete/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_GOVT")
+
+
 
                         // Trader APIs
                         .requestMatchers("/api/v1/trades/buy").hasAuthority("ROLE_TRADER")

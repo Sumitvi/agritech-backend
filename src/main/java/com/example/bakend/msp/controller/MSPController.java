@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -29,5 +31,25 @@ public class MSPController {
     public ResponseEntity<MSP> getMSP(@RequestBody MSPRequest request) {
         MSP msp = mspService.getMSP(request.getCropName());
         return ResponseEntity.ok(msp);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MSP>> getAllMSP() {
+        return ResponseEntity.ok(mspService.getAllMSP());
+    }
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<MSP> updateMSP(
+            @PathVariable Long id,
+            @RequestBody MSP updatedMSP) {
+
+        return ResponseEntity.ok(mspService.updateMSP(id, updatedMSP));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteMSP(@PathVariable Long id) {
+        mspService.deleteMSP(id);
+        return ResponseEntity.ok("MSP deleted successfully");
     }
 }

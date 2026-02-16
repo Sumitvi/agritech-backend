@@ -56,4 +56,53 @@ public class ContractorService {
         contractor.setActive(false);
         contractorRepository.save(contractor);
     }
+
+
+    public List<Contractor> getAll() {
+        return contractorRepository.findAll();
+    }
+
+    // Search
+    public List<Contractor> search(String keyword) {
+        return contractorRepository
+                .findByNameContainingIgnoreCaseOrDistrictContainingIgnoreCase(
+                        keyword, keyword);
+    }
+
+    // Update
+    public Contractor update(Long id, Contractor updated) {
+        Contractor existing = contractorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contractor not found"));
+
+        existing.setName(updated.getName());
+        existing.setMobile(updated.getMobile());
+        existing.setDistrict(updated.getDistrict());
+        existing.setState(updated.getState());
+        existing.setWorkType(updated.getWorkType());
+
+        return contractorRepository.save(existing);
+    }
+
+    // Delete
+    public void delete(Long id) {
+        contractorRepository.deleteById(id);
+    }
+
+    // Verify
+    public Contractor verify(Long id) {
+        Contractor contractor = contractorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        contractor.setVerified(true);
+        return contractorRepository.save(contractor);
+    }
+
+    // Block / Unblock
+    public Contractor block(Long id, boolean active) {
+        Contractor contractor = contractorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found"));
+
+        contractor.setActive(active);
+        return contractorRepository.save(contractor);
+    }
 }

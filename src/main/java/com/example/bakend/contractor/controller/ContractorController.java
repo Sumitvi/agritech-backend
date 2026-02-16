@@ -54,4 +54,36 @@ public class ContractorController {
     public void block(@PathVariable Long id) {
         contractorService.blockContractor(id);
     }
+
+
+    @GetMapping("/all")
+    public List<Contractor> getAll() {
+        return contractorService.getAll();
+    }
+
+
+    // Update
+    @PutMapping("/update/{id}")
+    public Contractor update(@PathVariable Long id,
+                             @RequestBody Contractor contractor) {
+        return contractorService.update(id, contractor);
+    }
+
+    @GetMapping("/admin/search")
+    public List<Contractor> searchAdmin(
+            @RequestParam String keyword
+    ) {
+        return contractorService.search(keyword);
+    }
+
+
+
+    // Delete
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        contractorService.delete(id);
+    }
+
+
+
 }

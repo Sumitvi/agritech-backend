@@ -21,4 +21,36 @@ public class MarketService {
     public MandiPrice saveMandiPrice(MandiPrice mandiPrice) {
         return mandiPriceRepository.save(mandiPrice);
     }
+
+
+
+
+
+    public List<MandiPrice> getAllMandiPrices() {
+        return mandiPriceRepository.findAll();
+    }
+
+
+    public MandiPrice updateMandiPrice(Long id, MandiPrice updated) {
+
+        MandiPrice existing = mandiPriceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mandi price not found"));
+
+        existing.setCropName(updated.getCropName());
+        existing.setState(updated.getState());
+        existing.setMandiName(updated.getMandiName());
+        existing.setModalPrice(updated.getModalPrice());
+
+        return mandiPriceRepository.save(existing);
+    }
+
+
+    public void deleteMandiPrice(Long id) {
+
+        if (!mandiPriceRepository.existsById(id)) {
+            throw new RuntimeException("Mandi price not found");
+        }
+
+        mandiPriceRepository.deleteById(id);
+    }
 }

@@ -10,4 +10,9 @@ public interface ContractorRepository extends JpaRepository<Contractor, Long> {
             String district,
             String workType
     );
+
+    List<Contractor> findByNameContainingIgnoreCaseOrDistrictContainingIgnoreCase(
+            String name,
+            String district
+    );
 }

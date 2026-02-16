@@ -7,4 +7,9 @@ import java.util.List;
 public interface MandiPriceRepository extends JpaRepository<MandiPrice, Long> {
 
     List<MandiPrice> findByCropNameAndState(String cropName, String state);
+
+    List<MandiPrice> findByCropNameIgnoreCaseAndStateIgnoreCase(
+            String cropName,
+            String state
+    );
 }
