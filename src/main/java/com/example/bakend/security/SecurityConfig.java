@@ -23,10 +23,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // ✅ Enable CORS (VERY IMPORTANT)
+
                 .cors(cors -> {})
 
-                // ✅ Disable CSRF (API based project)
+
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
@@ -45,8 +45,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/store/products").hasAuthority("ROLE_FARMER")
                         .requestMatchers("/api/v1/orders/my").hasAuthority("ROLE_FARMER")
                         .requestMatchers("/api/v1/cart/**").hasAuthority("ROLE_FARMER")
-                        .requestMatchers("/api/v1/orders/**").hasAuthority("ROLE_FARMER")
+                        .requestMatchers("/api/v1/orders/my").hasAuthority("ROLE_FARMER")
+
                         .requestMatchers("/api/v1/crops/**").hasAuthority("ROLE_FARMER")
+                        .requestMatchers("/api/v1/market/**").hasAuthority("ROLE_FARMER")
+
+
                         // Trader APIs
                         .requestMatchers("/api/v1/trades/buy").hasAuthority("ROLE_TRADER")
                         .requestMatchers("/api/v1/trades/trader/**").hasAuthority("ROLE_TRADER")
@@ -57,6 +61,9 @@ public class SecurityConfig {
                         .hasAnyAuthority("ROLE_STORE_OWNER", "ROLE_ADMIN")
                         .requestMatchers("/api/v1/orders/*/deliver")
                         .hasAnyAuthority("ROLE_STORE_OWNER", "ROLE_ADMIN")
+                        .requestMatchers("/api/v1/orders/store")
+                        .hasAnyAuthority("ROLE_STORE_OWNER", "ROLE_ADMIN")
+
 
                         // Admin / Govt APIs
                         .requestMatchers("/api/v1/admin/**")

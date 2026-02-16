@@ -4,6 +4,7 @@ import com.example.bakend.store.dto.AddProductRequest;
 import com.example.bakend.store.dto.SellerType;
 import com.example.bakend.store.entity.Product;
 import com.example.bakend.store.repository.ProductRepository;
+import com.example.bakend.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,4 +53,27 @@ public class ProductService {
         product.setActive(false);
         return productRepository.save(product);
     }
+
+    public Product addProductByStoreOwner(AddProductRequest request, User storeOwner) {
+
+        Product product = Product.builder()
+                .name(request.getName())
+                .category(request.getCategory())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .stockQuantity(request.getStockQuantity())
+                .active(true)
+                .storeOwner(storeOwner)
+                .build();
+
+        return productRepository.save(product);
+    }
+
+    public List<Product> getProductsByStoreOwner(User storeOwner) {
+        return productRepository.findByStoreOwner(storeOwner);
+    }
+
+
+
+
 }

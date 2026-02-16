@@ -25,7 +25,7 @@ public class OrderController {
     private UserRepository userRepository;
 
     @PostMapping("/place")
-    public OrderResponse placeOrder(@RequestBody PlaceOrderRequest request) {
+    public OrderResponse placeOrder() {
 
         String username = SecurityContextHolder.getContext()
                 .getAuthentication().getName();
@@ -35,19 +35,17 @@ public class OrderController {
 
         Order order = orderService.placeOrder(farmer);
 
-        return OrderResponse.builder()
-                .orderId(order.getId())
-                .status(order.getStatus().name())
-                .totalAmount(order.getTotalAmount())
-                .items(order.getItems().stream()
-                        .map(i -> OrderItemResponse.builder()
-                                .productId(i.getProduct().getId())
-                                .productName(i.getProduct().getName())
-                                .quantity(i.getQuantity())
-                                .price(i.getPrice())
-                                .build())
-                        .toList())
-                .build();
+        return map(order);
+    }
+
+
+    @GetMapping("/store")
+    public List<OrderResponse> getAllOrders() {
+
+        return orderService.getAllOrders()
+                .stream()
+                .map(this::map)
+                .toList();
     }
 
 

@@ -56,10 +56,13 @@ public class OrderService {
                 .status(OrderStatus.PLACED)
                 .build();
 
+        // 🔥 VERY IMPORTANT
+        order = orderRepository.save(order);
+
         cartService.clearCart(cart);
+
         return order;
     }
-
 
     @Autowired
     private OrderRepository orderRepository;
@@ -91,6 +94,11 @@ public class OrderService {
         order.setStatus(OrderStatus.DELIVERED);
         return orderRepository.save(order);
     }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
 
     // 👨‍🌾 Farmer – My Orders
     public List<Order> getOrdersForFarmer(User farmer) {

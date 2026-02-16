@@ -3,6 +3,9 @@ package com.example.bakend.store.controller;
 import com.example.bakend.store.dto.AddProductRequest;
 import com.example.bakend.store.entity.Product;
 import com.example.bakend.store.service.ProductService;
+import com.example.bakend.user.entity.User;
+import com.example.bakend.user.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
-
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/store")
@@ -22,37 +23,50 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
-     * Store Owner adds a product
-     * ROLE_STORE_OWNER
+     * STORE OWNER → Add product
      */
     @PostMapping("/product")
     public ResponseEntity<Product> addProduct(
             @RequestBody AddProductRequest request) {
 
-        // 🔐 Get logged-in store owner from JWT
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();
-        // username = mobile/email (based on your JWT)
 
-        // TEMP approach (recommended for now):
-        // pass storeOwnerId manually after fetching user
-        // In next step we’ll centralize this in a helper
-
-        Long storeOwnerId = Long.parseLong(username);
-        // ⚠️ Use only if JWT 'sub' = userId
-        // Otherwise replace with userRepository lookup
+        User storeOwner = userRepository.findByMobile(username)
+                .orElseThrow(() -> new RuntimeException("Store owner not found"));
 
         return ResponseEntity.ok(
-                productService.addProductByStoreOwner(request, storeOwnerId)
+                productService.addProductByStoreOwner(request, storeOwner)
         );
     }
 
     /**
-     * Farmer views all active products
-     * ROLE_FARMER
+     * STORE OWNER → View my products
+     */
+    @GetMapping("/my-products")
+    public ResponseEntity<List<Product>> getMyProducts() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User storeOwner = userRepository.findByMobile(username)
+                .orElseThrow(() -> new RuntimeException("Store owner not found"));
+
+        return ResponseEntity.ok(
+                productService.getProductsByStoreOwner(storeOwner)
+        );
+    }
+
+    /**
+     * FARMER → View active products
      */
     @GetMapping("/products")
     public ResponseEntity<List<Product>> viewProducts() {
@@ -61,10 +75,9 @@ public class ProductController {
         );
     }
 
-
-
-
-
+    /**
+     * STORE OWNER → Deactivate product
+     */
     @PostMapping("/deactivate/{productId}")
     public ResponseEntity<Map<String, String>> deactivateProduct(
             @PathVariable Long productId) {

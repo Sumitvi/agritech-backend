@@ -1,5 +1,6 @@
 package com.example.bakend.store.entity;
 import com.example.bakend.store.dto.SellerType;
+import com.example.bakend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,8 @@ public class Product {
     private Long sellerId;           // vendorId / cooperativeId
 
     private boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "store_owner_id")
+    private User storeOwner;
 }
