@@ -23,7 +23,7 @@ public class ContractorService {
                 .district(request.getDistrict())
                 .state(request.getState())
                 .workType(request.getWorkType())
-                .available(request.isAvailable())
+                .available(true)
                 .verified(false)
                 .active(true)
                 .build();
